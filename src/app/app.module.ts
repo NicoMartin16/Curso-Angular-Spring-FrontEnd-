@@ -23,6 +23,7 @@ import { LoginComponent } from './components/usuarios/login.component';
 import { AuthGuard } from './components/usuarios/guards/auth.guard';
 import { RoleGuard } from './components/usuarios/guards/role.guard';
 import { TokenInterceptor } from './components/usuarios/interceptors/token.interceptor';
+import { AuthInterceptor } from './components/usuarios/interceptors/auth.interceptor';
 
 
 
@@ -62,7 +63,8 @@ const ROUTES: Routes = [
   ],
   providers: [
     {provide: LOCALE_ID, useValue: 'es'},
-    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
 })
