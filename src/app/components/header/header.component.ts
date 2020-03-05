@@ -12,7 +12,7 @@ export class HeaderComponent implements OnInit {
 
   title: string = 'App Angular';
 
-  constructor(private _authService: AuthService, private router: Router) { }
+  constructor(public _authService: AuthService, private router: Router) { }
 
   ngOnInit() {
   }

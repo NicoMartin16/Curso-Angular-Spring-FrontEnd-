@@ -5,6 +5,8 @@ import { ModalService } from './modal.service';
 import swal from 'sweetalert2';
 import { HttpEventType } from '@angular/common/http';
 import { AuthService } from '../../usuarios/auth.service';
+import { FacturaService } from '../../facturas/services/factura.service';
+import { Factura } from '../../facturas/models/factura';
 
 @Component({
   selector: "detalle-cliente",
@@ -15,12 +17,14 @@ export class DetalleComponent implements OnInit {
   @Input() cliente: Cliente;
   titulo: string = "Detalle del cliente";
   fotoSeleccionada: File;
+  factura: Factura;
   progress: number;
 
   constructor(
     private _clienteService: ClienteService,
-    private _modalService: ModalService,
-    private _authService: AuthService
+    public _modalService: ModalService,
+    public _authService: AuthService,
+    private _facturaService: FacturaService
   ) {}
 
   ngOnInit() {}
@@ -63,5 +67,38 @@ export class DetalleComponent implements OnInit {
     this.fotoSeleccionada = null;
     this._modalService.cerrarModal();
     this.progress = 0;
+  }
+
+  delete(factura: Factura): void {
+    const swalWithBootstrapButtons = swal.mixin({
+      customClass: {
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-danger mr-2"
+      },
+      buttonsStyling: false
+    });
+
+    swalWithBootstrapButtons
+      .fire({
+        title: "Estas seguro?",
+        text: `¿Seguro que deseas eliminar la factura ${factura.descripcion}?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Si, eliminar!",
+        cancelButtonText: "No, cancelar!",
+        reverseButtons: true
+      })
+      .then(result => {
+        if (result.value) {
+          this._facturaService.delete(factura.id).subscribe(res => {
+            this.cliente.facturas = this.cliente.facturas.filter(f => f !== factura);
+            swalWithBootstrapButtons.fire(
+              "Factura eliminada!",
+              `El cliente ${factura.descripcion} ha sido eliminada con exito`,
+              "success"
+            );
+          });
+        }
+      });
   }
 }

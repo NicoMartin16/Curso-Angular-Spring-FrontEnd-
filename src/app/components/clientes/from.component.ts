@@ -58,6 +58,8 @@ export class FromComponent implements OnInit {
   }
 
   update(): void {
+
+    this.cliente.facturas = null;
     this._clienteService.update(this.cliente).subscribe(
       res => {
         this.router.navigate(['/clientes']);

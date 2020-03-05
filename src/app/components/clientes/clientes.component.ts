@@ -19,8 +19,8 @@ export class ClientesComponent implements OnInit {
   constructor(
     private _clienteService: ClienteService,
     private Route: ActivatedRoute,
-    private _modalService: ModalService,
-    private _authService: AuthService
+    public _modalService: ModalService,
+    public _authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -52,8 +52,8 @@ export class ClientesComponent implements OnInit {
             clienteOriginal.foto = cliente.foto;
           }
           return clienteOriginal;
-        })
-      })
+        });
+      });
   }
 
   delete(cliente: Cliente): void {
